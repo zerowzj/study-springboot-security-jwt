@@ -1,11 +1,11 @@
-package study.springboot.security.jwt.auth.userdetails;
+package study.springboot.security.jwt.auth.details;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
