@@ -1,7 +1,6 @@
 package study.springboot.security.jwt.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,31 +24,18 @@ import study.springboot.security.jwt.auth.filter.JwtAuthenticationTokenFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
-
+    @Autowired
+    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
     private AccessDeniedHandler accessDeniedHandler;
-
-    private UserDetailsService CustomUserDetailsService;
-
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
     private JwtAuthenticationTokenFilter authenticationTokenFilter;
 
     @Autowired
-    public WebSecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler,
-                             @Qualifier("RestAuthenticationAccessDeniedHandler") AccessDeniedHandler accessDeniedHandler,
-                             @Qualifier("CustomUserDetailsService") UserDetailsService CustomUserDetailsService,
-                             JwtAuthenticationTokenFilter authenticationTokenFilter) {
-        this.unauthorizedHandler = unauthorizedHandler;
-        this.accessDeniedHandler = accessDeniedHandler;
-        this.CustomUserDetailsService = CustomUserDetailsService;
-        this.authenticationTokenFilter = authenticationTokenFilter;
-    }
-
-    @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder
-                // 设置UserDetailsService
-                .userDetailsService(this.CustomUserDetailsService)
-                // 使用BCrypt进行密码的hash
+        authenticationManagerBuilder.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -68,7 +54,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
                 // 由于使用的是JWT，我们这里不需要csrf
                 .csrf().disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler).and()
+                .authenticationEntryPoint(authenticationEntryPoint).and()
                 // 基于token，所以不需要session
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
