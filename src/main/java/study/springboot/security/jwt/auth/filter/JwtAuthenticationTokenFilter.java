@@ -19,16 +19,18 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
+    private static final String TOKEN_HEADER = "TOKEN";
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-        String authToken = request.getHeader(this.token_header);
+        String token = request.getHeader(this.TOKEN_HEADER);
         final String auth_token_start = "Bearer ";
-        if (Strings.isNotEmpty(authToken) && authToken.startsWith(auth_token_start)) {
-            authToken = authToken.substring(auth_token_start.length());
+        if (Strings.isNotEmpty(token) && token.startsWith(auth_token_start)) {
+            token = token.substring(auth_token_start.length());
         } else {
             // 不按规范,不允许通过验证
-            authToken = null;
+            token = null;
         }
         String username = jwtUtils.getUsernameFromToken(auth_token);
         logger.info(String.format("Checking authentication for user %s.", username));

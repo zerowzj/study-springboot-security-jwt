@@ -26,13 +26,16 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <!-- ============================== -->
-        <!--（★）Spring Security JWT         -->
+        <!--（★）Spring Security JWT       -->
         <!-- ============================== -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-jwt</artifactId>
             <version>1.1.0.RELEASE</version>
         </dependency>
+        <!-- ============================== -->
+        <!--（★）JWT                       -->
+        <!-- ============================== -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>

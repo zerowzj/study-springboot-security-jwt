@@ -5,10 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,8 +18,8 @@ import study.springboot.security.jwt.auth.entrypoint.JwtAuthenticationEntryPoint
 import study.springboot.security.jwt.auth.filter.JwtAuthenticationTokenFilter;
 
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -47,18 +45,16 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler);
+        //由于使用的是JWT，我们这里不需要csrf
+        httpSecurity.csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint);
+        //基于token，所以不需要session
+        httpSecurity.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity
-                .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .and()
-                // 由于使用的是JWT，我们这里不需要csrf
-                .csrf().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint).and()
-                // 基于token，所以不需要session
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
                 .authorizeRequests()
                 // 对于获取token的rest api要允许匿名访问
                 .antMatchers("/api/v1/auth", "/api/v1/signout", "/error/**", "/api/**").permitAll()

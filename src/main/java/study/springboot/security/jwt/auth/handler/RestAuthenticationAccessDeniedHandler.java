@@ -16,7 +16,8 @@ import java.io.PrintWriter;
 public class RestAuthenticationAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response,
+                       AccessDeniedException ex) throws IOException, ServletException {
         //登陆状态下，权限不足执行该方法
         System.out.println("权限不足：" + ex.getMessage());
         response.setStatus(200);

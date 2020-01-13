@@ -8,42 +8,10 @@ logging:
 spring:
   application:
     name: study-springboot-security-jwt
-  redis:
-    host: 114.67.102.8
-    port: 6379
-    database: 0
-    password: abc123
-  #
-  #  devtools:
-  #    restart:
-  #      enabled: true
-  #      additional-paths: src/main/java
-  #  JSP
-  mvc:
-    static-path-pattern: /**
-
-  #    view:
-  #      prefix: /WEB-INF/jsp/
-  #      suffix: .jsp
-  # Resources
-  resources:
-    static-locations: classpath:/static/
-  # Thymeleaf
-  thymeleaf:
-    #开启模板缓存（默认值：true）
-    enabled: true
-    #
-    prefix: classpath:/templates/
-    suffix: .html
-    #开发时关闭缓存,不然没法看到实时页面
-    cache: false
-    #Check that the template exists before rendering it.
-    check-template: true
-    #检查模板位置是否正确（默认值:true）
-    check-template-location: true
-    #模板编码
-    encoding: UTF-8
-    #用非严格的HTMl
-    mode: HTML5
-    servlet:
-      content-type: text/html
+####################
+#
+####################
+jwt:
+  secret: secret
+  expiration: 7200000
+  token: Authorization

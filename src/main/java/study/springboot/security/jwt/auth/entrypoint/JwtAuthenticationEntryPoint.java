@@ -18,9 +18,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
+                         AuthenticationException ex) throws IOException, ServletException {
         //验证为未登陆状态会进入此方法，认证错误
-        System.out.println("认证失败：" + authException.getMessage());
+        System.out.println("认证失败：" + ex.getMessage());
         response.setStatus(200);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
