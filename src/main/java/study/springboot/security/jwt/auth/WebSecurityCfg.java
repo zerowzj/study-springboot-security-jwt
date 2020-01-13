@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import study.springboot.security.jwt.auth.entrypoint.JwtAuthenticationEntryPoint;
+import study.springboot.security.jwt.auth.entrypoint.RestAuthenticationEntryPoint;
 import study.springboot.security.jwt.auth.filter.JwtAuthenticationTokenFilter;
 
 @Configuration
@@ -23,7 +23,7 @@ import study.springboot.security.jwt.auth.filter.JwtAuthenticationTokenFilter;
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private RestAuthenticationEntryPoint authenticationEntryPoint;
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
     @Autowired

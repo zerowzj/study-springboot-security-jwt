@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 
 @Slf4j
 @Component
-public class RestAuthenticationAccessDeniedHandler implements AccessDeniedHandler {
+public class RestAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
