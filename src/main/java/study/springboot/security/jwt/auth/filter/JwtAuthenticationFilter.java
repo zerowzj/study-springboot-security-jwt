@@ -23,9 +23,9 @@ import java.util.ArrayList;
  */
 @Slf4j
 @Component
-public class JwtAuthFilter extends BasicAuthenticationFilter {
+public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
-    public JwtAuthFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
 
