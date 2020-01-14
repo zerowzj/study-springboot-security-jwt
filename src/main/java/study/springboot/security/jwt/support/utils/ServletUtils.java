@@ -22,6 +22,7 @@ public class ServletUtils {
     }
 
     public static void write(HttpServletResponse response, Map<String, Object> result) {
+        log.info("===>{}", response.getStatus());
         PrintWriter writer = null;
         try {
             response.setContentType("application/json; charset=utf-8");
