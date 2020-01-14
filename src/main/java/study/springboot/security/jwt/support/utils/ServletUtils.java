@@ -25,7 +25,7 @@ public class ServletUtils {
         log.info("===>{}", response.getStatus());
         PrintWriter writer = null;
         try {
-            response.setContentType("application/json; charset=utf-8");
+            response.setContentType("application/json; charset=UTF-8");
             writer = response.getWriter();
             String text = JsonUtils.toJson(result);
             writer.write(text);
