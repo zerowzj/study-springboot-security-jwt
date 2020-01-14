@@ -36,9 +36,8 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         log.info("======> doFilterInternal");
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
-            ServletUtils.write(response, Results.error("9090", "请先登录"));
-//            chain.doFilter(request, response);
-            return;
+//            ServletUtils.write(response, Results.error("9090", "请先登录"));
+            throw new RuntimeException("fssssssssssssss");
         }
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
         SecurityContextHolder.getContext()
