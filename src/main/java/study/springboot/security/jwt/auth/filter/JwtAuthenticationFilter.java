@@ -1,11 +1,14 @@
 package study.springboot.security.jwt.auth.filter;
 
+import com.sun.xml.internal.ws.handler.ServerLogicalHandlerTube;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import study.springboot.security.jwt.support.Results;
+import study.springboot.security.jwt.support.utils.ServletUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -33,7 +36,8 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         log.info("======> doFilterInternal");
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
-            chain.doFilter(request, response);
+            ServletUtils.write(response, Results.error("9090", "请先登录"));
+//            chain.doFilter(request, response);
             return;
         }
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
@@ -51,7 +55,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                     .parseClaimsJws(token.replace("Bearer ", ""))
                     .getBody()
                     .getSubject();
-
             if (user != null) {
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
             }

@@ -22,13 +22,18 @@ public class ServletUtils {
     }
 
     public static void write(HttpServletResponse response, Map<String, Object> result) {
-        PrintWriter writer;
+        PrintWriter writer = null;
         try {
+            response.setContentType("application/json; charset=utf-8");
             writer = response.getWriter();
             String text = JsonUtils.toJson(result);
             writer.write(text);
         } catch (Exception ex) {
             log.error("", ex);
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
         }
     }
 }

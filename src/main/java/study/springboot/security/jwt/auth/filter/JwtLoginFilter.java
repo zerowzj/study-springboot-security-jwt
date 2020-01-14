@@ -78,7 +78,6 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException ex) throws IOException, ServletException {
-        log.info("ffffffffffffffffffff", ex);
         if (ex instanceof BadCredentialsException) {
             ServletUtils.write(response, Results.error("9999", "用户名或密码错误"));
             return;
