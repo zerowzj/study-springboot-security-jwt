@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 import study.springboot.security.jwt.support.utils.JsonUtils;
 
 import javax.servlet.FilterChain;
@@ -29,7 +28,6 @@ import java.util.Date;
  * successfulAuthentication ：用户成功登录后，这个方法会被调用，我们在这个方法里生成token。
  */
 @Slf4j
-@Component
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
