@@ -73,6 +73,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
                 .compact();
         response.addHeader("Authorization", "Bearer " + token);
+        ServletUtils.write(response, Results.ok(null));
     }
 
     /**
