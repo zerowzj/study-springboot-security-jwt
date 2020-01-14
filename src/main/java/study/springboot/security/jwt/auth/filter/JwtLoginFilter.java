@@ -8,8 +8,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import study.springboot.security.jwt.auth.details.CustomUserDetails;
 import study.springboot.security.jwt.support.utils.JsonUtils;
 
 import javax.servlet.FilterChain;
@@ -41,16 +41,17 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        log.info("JwtLoginFilterJwtLoginFilterJwtLoginFilterJwtLoginFilter");
         InputStream is = null;
         try {
             is = request.getInputStream();
         } catch (Exception ex) {
             log.error("", ex);
         }
-        User user = JsonUtils.fromJson(is, User.class);
+        CustomUserDetails userDetails = JsonUtils.fromJson(is, CustomUserDetails.class);
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                user.getUsername(),
-                user.getPassword(),
+                userDetails.getUsername(),
+                userDetails.getPassword(),
                 Lists.newArrayList());
         return authenticationManager.authenticate(token);
     }

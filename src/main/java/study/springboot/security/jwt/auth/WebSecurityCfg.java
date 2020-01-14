@@ -21,7 +21,7 @@ import study.springboot.security.jwt.auth.filter.JwtLoginFilter;
  * 通过SpringSecurity的配置，将JwtLoginFilter，JwtAuthFilter组合在一起
  */
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 //@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
