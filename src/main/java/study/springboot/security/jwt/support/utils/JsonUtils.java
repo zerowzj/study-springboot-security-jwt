@@ -13,7 +13,7 @@ public class JsonUtils {
     }
 
     public static <T> T fromJson(String text, Class<T> clazz) {
-        T obj = null;
+        T obj;
         try {
             obj = JSON.parseObject(text, clazz);
         } catch (Exception ex) {
@@ -24,7 +24,7 @@ public class JsonUtils {
     }
 
     public static <T> T fromJson(InputStream is, Class<T> clazz) {
-        T obj = null;
+        T obj;
         try {
             obj = JSON.parseObject(is, clazz);
         } catch (Exception ex) {
