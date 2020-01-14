@@ -27,17 +27,12 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilter(new JwtLoginFilter(authenticationManager()))
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()));
         http.authorizeRequests()
-                .antMatchers("/sayHi", "/sayBye").permitAll()
-                .anyRequest().authenticated();
-//        http.exceptionHandling()
-//                .accessDeniedHandler(accessDeniedHandler);
-
-        http.cors()
+                .antMatchers("/demo").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .csrf().disable();
+                .addFilter(new JwtLoginFilter(authenticationManager()))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()));
     }
 
     @Override
