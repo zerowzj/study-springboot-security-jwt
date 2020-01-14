@@ -1,5 +1,6 @@
 package study.springboot.security.jwt.auth.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -11,10 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationSuccessHandler.class);
 
     private static final String DEFAULT_TARGET_URL = "/demo.html";
 
@@ -25,7 +25,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) throws IOException, ServletException {
         this.setDefaultTargetUrl(DEFAULT_TARGET_URL);
         this.setAlwaysUseDefaultTargetUrl(ALWAYS_USER_DEFAULT_TARGET_URL);
-        LOGGER.info("===>登录成功");
+        log.info("===>登录成功");
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }
