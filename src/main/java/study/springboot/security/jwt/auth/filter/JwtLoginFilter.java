@@ -1,7 +1,6 @@
 package study.springboot.security.jwt.auth.filter;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.springboot.security.jwt.auth.details.CustomUserDetails;
+import study.springboot.security.jwt.support.Results;
 import study.springboot.security.jwt.support.utils.JsonUtils;
+import study.springboot.security.jwt.support.utils.ServletUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -21,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * 认证
@@ -79,12 +79,9 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException ex) throws IOException, ServletException {
         log.info("ffffffffffffffffffff", ex);
-        Map result = Maps.newHashMap();
-        if(ex instanceof BadCredentialsException){
-
+        if (ex instanceof BadCredentialsException) {
+            ServletUtils.write(response, Results.error("9999", "用户名或密码错误"));
+            return;
         }
-        super.unsuccessfulAuthentication(request, response, ex);
     }
-
-
 }
