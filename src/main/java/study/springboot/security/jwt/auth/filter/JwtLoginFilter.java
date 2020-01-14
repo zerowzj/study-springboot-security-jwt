@@ -62,8 +62,9 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
+        CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
         String token = Jwts.builder()
-                .setSubject(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername())
+                .setSubject(userDetails.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
                 .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
                 .compact();
