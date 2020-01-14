@@ -4,14 +4,11 @@ import com.google.common.collect.Lists;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.springboot.security.jwt.auth.details.CustomUserDetails;
 import study.springboot.security.jwt.support.Results;
@@ -63,7 +60,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     /**
-     * 用户成功登录后，这个方法会被调用，我们在这个方法里生成token
+     * 用户登录成功后，这个方法会被调用，我们在这个方法里生成token
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
@@ -78,6 +75,9 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         response.addHeader("Authorization", "Bearer " + token);
     }
 
+    /**
+     * 用户成登录失败后
+     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException ex) throws IOException, ServletException {
