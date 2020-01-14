@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -13,7 +14,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.springboot.security.jwt.auth.details.CustomUserDetails;
+import study.springboot.security.jwt.support.Results;
 import study.springboot.security.jwt.support.utils.JsonUtils;
+import study.springboot.security.jwt.support.utils.ServletUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -37,18 +40,6 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     public JwtLoginFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-    }
-
-    @Autowired
-    @Override
-    public void setAuthenticationSuccessHandler(AuthenticationSuccessHandler successHandler) {
-        super.setAuthenticationSuccessHandler(successHandler);
-    }
-
-    @Autowired
-    @Override
-    public void setAuthenticationFailureHandler(AuthenticationFailureHandler failureHandler) {
-        super.setAuthenticationFailureHandler(failureHandler);
     }
 
     /**
@@ -85,15 +76,14 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
                 .compact();
         response.addHeader("Authorization", "Bearer " + token);
-        super.successfulAuthentication(request, response, chain, authentication);
     }
-//
-//    @Override
-//    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-//                                              AuthenticationException ex) throws IOException, ServletException {
-//        if (ex instanceof BadCredentialsException) {
-//            ServletUtils.write(response, Results.error("9999", "用户名或密码错误"));
-//            return;
-//        }
-//    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                              AuthenticationException ex) throws IOException, ServletException {
+        if (ex instanceof BadCredentialsException) {
+            ServletUtils.write(response, Results.error("9999", "用户名或密码错误"));
+            return;
+        }
+    }
 }
