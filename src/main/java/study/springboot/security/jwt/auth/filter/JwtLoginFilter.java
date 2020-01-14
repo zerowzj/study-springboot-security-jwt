@@ -1,10 +1,12 @@
 package study.springboot.security.jwt.auth.filter;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 认证
@@ -41,7 +44,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        log.info("JwtLoginFilterJwtLoginFilterJwtLoginFilterJwtLoginFilter");
+        log.info("======> attemptAuthentication");
         InputStream is = null;
         try {
             is = request.getInputStream();
@@ -62,6 +65,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
+        log.info("======> successfulAuthentication");
         CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
         String token = Jwts.builder()
                 .setSubject(userDetails.getUsername())
@@ -70,4 +74,17 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .compact();
         response.addHeader("Authorization", "Bearer " + token);
     }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                              AuthenticationException ex) throws IOException, ServletException {
+        log.info("ffffffffffffffffffff", ex);
+        Map result = Maps.newHashMap();
+        if(ex instanceof BadCredentialsException){
+
+        }
+        super.unsuccessfulAuthentication(request, response, ex);
+    }
+
+
 }
