@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import study.springboot.security.jwt.auth.entrypoint.JwtAuthenticationEntryPoint;
@@ -28,15 +30,25 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.debug(true);
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //
+        http.authorizeRequests()
+                .antMatchers("/demo").permitAll()
+                .anyRequest().authenticated();
+        //过滤器
+        http.addFilter(new JwtLoginFilter(authenticationManager()))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()));
+        //禁用csrf和session
+        http.csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //异常处理
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);
-        //
-        http.addFilter(new JwtLoginFilter(authenticationManager()))
-                .addFilter(new JwtAuthenticationFilter(authenticationManager())).authorizeRequests()
-                .antMatchers("/demo").permitAll()
-                .anyRequest().authenticated();
     }
 
     @Override
