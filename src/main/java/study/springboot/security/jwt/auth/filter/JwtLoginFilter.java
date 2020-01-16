@@ -51,12 +51,15 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         } catch (Exception ex) {
             log.error("", ex);
         }
+        //构造token
         CustomUserDetails userDetails = JsonUtils.fromJson(is, CustomUserDetails.class);
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(),
                 userDetails.getPassword(),
                 Lists.newArrayList());
-        return authenticationManager.authenticate(token);
+        //认证
+        Authentication authentication = authenticationManager.authenticate(token);
+        return authentication;
     }
 
     /**
