@@ -79,9 +79,9 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         ServletUtils.write(response, Results.ok(null));
     }
 
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                              AuthenticationException ex) throws IOException, ServletException {
-        log.info("======> unsuccessfulAuthentication");
-    }
+//    @Override
+//    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+//                                              AuthenticationException ex) throws IOException, ServletException {
+//        log.info("======> unsuccessfulAuthentication");
+//    }
 }
