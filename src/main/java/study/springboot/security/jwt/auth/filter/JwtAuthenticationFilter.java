@@ -1,11 +1,13 @@
 package study.springboot.security.jwt.auth.filter;
 
+import com.google.common.base.Strings;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import study.springboot.security.jwt.auth.Constants;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -31,11 +33,16 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
         log.info("======> doFilterInternal");
-        String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer ")) {
-            throw new RuntimeException("需要认证");
+        //TODO
+        String token = request.getHeader(Constants.AUTHORIZATION_HEADER);
+        if (Strings.isNullOrEmpty(token)) {
+            //throw new BadCredentialsException("需要认证");
+            chain.doFilter(request, response);
+            return;
         }
+
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
+        //
         SecurityContextHolder.getContext()
                 .setAuthentication(authentication);
         chain.doFilter(request, response);
@@ -46,7 +53,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         if (token != null) {
 
             String user = Jwts.parser()
-                    .setSigningKey("MyJwtSecret")
+                    .setSigningKey("JwtSecret")
                     .parseClaimsJws(token.replace("Bearer ", ""))
                     .getBody()
                     .getSubject();

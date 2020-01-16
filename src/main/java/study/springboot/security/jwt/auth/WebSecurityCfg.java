@@ -33,6 +33,9 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.debug(true);
+        //
+        web.ignoring()
+                .antMatchers("/demo");
     }
 
     @Override
@@ -47,8 +50,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/demo").permitAll()
 //                .anyRequest().authenticated();
         //过滤器
-        http.addFilter(new JwtLoginFilter(authenticationManager()))
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()));
+        http.addFilter(new JwtLoginFilter(authenticationManager()));
         //异常处理
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);

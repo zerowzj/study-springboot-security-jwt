@@ -5,11 +5,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import study.springboot.security.jwt.auth.Constants;
 import study.springboot.security.jwt.auth.details.CustomUserDetails;
 import study.springboot.security.jwt.support.Results;
 import study.springboot.security.jwt.support.utils.JsonUtils;
@@ -72,19 +72,13 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
                 .signWith(SignatureAlgorithm.HS512, "JwtSecret")
                 .compact();
-        response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader(Constants.AUTHORIZATION_HEADER, "Bearer " + token);
         ServletUtils.write(response, Results.ok(null));
     }
 
-    /**
-     * 用户成登录失败后
-     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException ex) throws IOException, ServletException {
-        if (ex instanceof BadCredentialsException) {
-            ServletUtils.write(response, Results.error("9999", "用户名或密码错误"));
-            return;
-        }
+        log.info("======> unsuccessfulAuthentication");
     }
 }
