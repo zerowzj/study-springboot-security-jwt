@@ -22,10 +22,10 @@ public class Jwt_Test {
         //payload
         builder.setId("123123")
                 .setIssuer("123123")
+                .setIssuedAt(new Date())
                 .setSubject("wzj")
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
-                .setNotBefore(new Date())
-                .setIssuedAt(new Date());
+                .setNotBefore(new Date());
         //signature
         builder.signWith(SignatureAlgorithm.HS256, "MyJwtSecret");
         String token = builder.compact();
