@@ -1,9 +1,11 @@
 package study.springboot.security.jwt.auth.filter;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -14,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * token的校验
@@ -36,9 +37,9 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         //TODO
         String token = request.getHeader(Constants.AUTHORIZATION_HEADER);
         if (Strings.isNullOrEmpty(token)) {
-            //throw new BadCredentialsException("需要认证");
-            chain.doFilter(request, response);
-            return;
+            throw new BadCredentialsException("需要认证");
+//            chain.doFilter(request, response);
+//            return;
         }
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
@@ -50,18 +51,11 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if (token != null) {
-
-            String user = Jwts.parser()
-                    .setSigningKey("JwtSecret")
-                    .parseClaimsJws(token.replace("Bearer ", ""))
-                    .getBody()
-                    .getSubject();
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
-            }
-            return null;
-        }
-        return null;
+        String username = Jwts.parser()
+                .setSigningKey("JwtSecret")
+                .parseClaimsJws(token.replace("Bearer ", ""))
+                .getBody()
+                .getSubject();
+        return new UsernamePasswordAuthenticationToken(username, null, Lists.newArrayList());
     }
 }

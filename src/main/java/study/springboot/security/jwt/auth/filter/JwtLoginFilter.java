@@ -11,9 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.springboot.security.jwt.auth.Constants;
 import study.springboot.security.jwt.auth.details.CustomUserDetails;
-import study.springboot.security.jwt.support.Results;
 import study.springboot.security.jwt.support.utils.JsonUtils;
-import study.springboot.security.jwt.support.utils.ServletUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -75,8 +73,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
                 .signWith(SignatureAlgorithm.HS512, "JwtSecret")
                 .compact();
-        response.addHeader(Constants.AUTHORIZATION_HEADER, "Bearer " + token);
-        ServletUtils.write(response, Results.ok(null));
+        response.addHeader(Constants.AUTHORIZATION_HEADER, Constants.PREFIX + token);
+        //ServletUtils.write(response, Results.ok());
     }
 
 //    @Override

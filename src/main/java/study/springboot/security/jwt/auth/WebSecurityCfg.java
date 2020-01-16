@@ -50,7 +50,8 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/demo").permitAll()
 //                .anyRequest().authenticated();
         //过滤器
-        http.addFilter(new JwtLoginFilter(authenticationManager()));
+        http.addFilter(new JwtLoginFilter(authenticationManager()))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()));
         //异常处理
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);
