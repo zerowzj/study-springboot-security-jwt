@@ -70,7 +70,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         String token = Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
-                .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
+                .signWith(SignatureAlgorithm.HS512, "JwtSecret")
                 .compact();
         response.addHeader("Authorization", "Bearer " + token);
         ServletUtils.write(response, Results.ok(null));

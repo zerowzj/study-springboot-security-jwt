@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +21,7 @@ import study.springboot.security.jwt.auth.filter.JwtLoginFilter;
  * 通过SpringSecurity的配置，将JwtLoginFilter，JwtAuthFilter组合在一起
  */
 @Configuration
-//@EnableWebSecurity// 这个注解必须加，开启Security
+@EnableWebSecurity  // 这个注解必须加，开启Security
 //@EnableGlobalMethodSecurity(prePostEnabled = true)//保证post之前的注解可以使用
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
@@ -36,9 +37,9 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //禁用csrf和session
+        //CSRF
         http.csrf().disable();
-        //
+        //Session管理
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //授权

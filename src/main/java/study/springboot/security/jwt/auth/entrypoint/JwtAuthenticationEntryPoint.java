@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import study.springboot.security.jwt.support.Results;
-import study.springboot.security.jwt.support.utils.ServletUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +17,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException ex) throws IOException, ServletException {
-        log.info("");
-        response.setStatus(200);
-        ServletUtils.write(response, Results.error("9090", "ssss"));
+        log.info("JwtAuthenticationEntryPoint");
     }
 }
