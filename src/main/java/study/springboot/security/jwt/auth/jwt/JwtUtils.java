@@ -1,4 +1,4 @@
-package study.springboot.security.jwt.auth;
+package study.springboot.security.jwt.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -7,17 +7,19 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClaims;
 
+import java.util.Map;
+
 public class JwtUtils {
 
     private final static SignatureAlgorithm DEFAULT_ALGORITHM = SignatureAlgorithm.HS256;
 
-    private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ";
+    private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ123";
 
-    public static String createToken(Claims claims) {
+    public static String createToken(Map<String, Object> claims) {
         return createToken(claims, null, null);
     }
 
-    public static String createToken(Claims claims, SignatureAlgorithm algorithm, String base64SecretKey) {
+    public static String createToken(Map<String, Object> claims, SignatureAlgorithm algorithm, String base64SecretKey) {
         if (algorithm == null) {
             algorithm = DEFAULT_ALGORITHM;
         }

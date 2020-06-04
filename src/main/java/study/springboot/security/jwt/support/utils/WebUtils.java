@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 @Slf4j
-public class ServletUtils {
+public class WebUtils {
 
     public static void sendError(HttpServletResponse response, int statusCode) {
         sendError(response, statusCode, null);
