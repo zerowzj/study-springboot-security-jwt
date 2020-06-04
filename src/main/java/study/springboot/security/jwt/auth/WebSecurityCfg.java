@@ -13,7 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import study.springboot.security.jwt.auth.entrypoint.JwtAuthenticationEntryPoint;
-import study.springboot.security.jwt.auth.filter.JwtAuthenticationFilter;
+import study.springboot.security.jwt.auth.filter.JwtAuthFilter;
 import study.springboot.security.jwt.auth.filter.JwtLoginFilter;
 
 /**
@@ -51,7 +51,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated();
         //过滤器
         http.addFilter(new JwtLoginFilter(authenticationManager()))
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()));
+                .addFilter(new JwtAuthFilter(authenticationManager()));
         //异常处理
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);

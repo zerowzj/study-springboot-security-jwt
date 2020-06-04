@@ -24,9 +24,9 @@ import java.io.IOException;
  * 如果校验通过，就认为这是一个取得授权的合法请求
  */
 @Slf4j
-public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
+public class JwtAuthFilter extends BasicAuthenticationFilter {
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
 
