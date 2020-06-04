@@ -19,17 +19,17 @@ public class JwtUtils {
         return createToken(claims, null, null);
     }
 
-    public static String createToken(Map<String, Object> claims, SignatureAlgorithm algorithm, String base64SecretKey) {
+    public static String createToken(Map<String, Object> claims, SignatureAlgorithm algorithm, String secretKey) {
         if (algorithm == null) {
             algorithm = DEFAULT_ALGORITHM;
         }
-        if (base64SecretKey == null) {
-            base64SecretKey = DEFAULT_SECRET_KEY;
+        if (secretKey == null) {
+            secretKey = DEFAULT_SECRET_KEY;
         }
         //payload标准声明和私有声明
         JwtBuilder builder = Jwts.builder()
                 .setClaims(claims)
-                .signWith(algorithm, base64SecretKey);
+                .signWith(algorithm, secretKey);
         return builder.compact();
     }
 
@@ -37,14 +37,13 @@ public class JwtUtils {
         return parseToken(jwt, null);
     }
 
-    public static Claims parseToken(String jwt, String base64SecretKey) {
-        if (base64SecretKey == null) {
-            base64SecretKey = DEFAULT_SECRET_KEY;
+    public static Claims parseToken(String jwt, String secretKey) {
+        if (secretKey == null) {
+            secretKey = DEFAULT_SECRET_KEY;
         }
         Jws<Claims> jws = Jwts.parser()
-                .setSigningKey(base64SecretKey)
+                .setSigningKey(secretKey)
                 .parseClaimsJws(jwt);
-
         return jws.getBody();
     }
 
