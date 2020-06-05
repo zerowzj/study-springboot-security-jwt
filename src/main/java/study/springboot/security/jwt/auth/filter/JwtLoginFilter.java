@@ -11,10 +11,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.springboot.security.jwt.auth.details.CustomUserDetails;
 import study.springboot.security.jwt.auth.jwt.JwtUtils;
+import study.springboot.security.jwt.support.Results;
 import study.springboot.security.jwt.support.utils.JsonUtils;
+import study.springboot.security.jwt.support.utils.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -57,9 +60,12 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         String jwt = JwtUtils.createToken(null);
-
+        Cookie cookie = new Cookie("jwt", jwt);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(3*3600);
+        response.addCookie(cookie);
 //        response.addHeader(Constants.AUTHORIZATION_HEADER, Constants.PREFIX + token);
-        //ServletUtils.write(response, Results.ok());
+        WebUtils.write(response, Results.ok());
     }
 
     @Override

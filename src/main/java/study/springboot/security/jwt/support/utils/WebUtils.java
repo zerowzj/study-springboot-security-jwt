@@ -2,12 +2,24 @@ package study.springboot.security.jwt.support.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.Map;
 
 @Slf4j
 public class WebUtils {
+
+    public static HttpServletRequest toHttp(ServletRequest servletRequest) {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        return request;
+    }
+
+    public static HttpServletResponse toHttp(HttpServletResponse servletResponse) {
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        return response;
+    }
 
     public static void sendError(HttpServletResponse response, int statusCode) {
         sendError(response, statusCode, null);
