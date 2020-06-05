@@ -13,7 +13,7 @@ public class WebUtils {
 
     /**
      * ====================
-     * <p>
+     * 转换Http
      * ====================
      */
     public static HttpServletRequest toHttp(ServletRequest servletRequest) {
@@ -24,6 +24,15 @@ public class WebUtils {
     public static HttpServletResponse toHttp(HttpServletResponse servletResponse) {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         return response;
+    }
+
+    /**
+     * ====================
+     * 获取请求头
+     * ====================
+     */
+    public static String getHeader(HttpServletRequest request, String name) {
+        return request.getHeader(name);
     }
 
     /**

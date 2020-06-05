@@ -1,4 +1,4 @@
-package study.springboot.security.jwt.support;
+package study.springboot.security.jwt.support.result;
 
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;

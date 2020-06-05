@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import study.springboot.security.jwt.auth.Constants;
+import study.springboot.security.jwt.support.utils.CookieUtils;
+import study.springboot.security.jwt.support.utils.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,12 +37,14 @@ public class JwtAuthFilter extends BasicAuthenticationFilter {
                                     FilterChain chain) throws IOException, ServletException {
         log.info("======> doFilterInternal");
         //TODO
-        String token = request.getHeader(Constants.AUTHORIZATION_HEADER);
-        if (Strings.isNullOrEmpty(token)) {
+        String jwt = WebUtils.getHeader(request, Constants.AUTHORIZATION_HEADER);
+        if (Strings.isNullOrEmpty(jwt)) {
             throw new BadCredentialsException("需要认证");
 //            chain.doFilter(request, response);
 //            return;
         }
+
+//        String jwt = CookieUtils.getValue(request, "jwt");
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
         //

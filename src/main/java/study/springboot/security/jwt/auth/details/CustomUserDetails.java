@@ -11,13 +11,13 @@ import java.util.Collection;
 @Getter
 public class CustomUserDetails implements UserDetails {
 
-    private String loginName;
+    private String username;
 
-    private String loginPwd;
+    private String token;
 
-    public CustomUserDetails(String loginName, String loginPwd){
-        this.loginName = loginName;
-        this.loginPwd = loginPwd;
+    public CustomUserDetails(String username, String token){
+        this.username = username;
+        this.token = token;
     }
 
     @Override
@@ -27,12 +27,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.loginPwd;
+        return this.username;
     }
 
     @Override
     public String getUsername() {
-        return this.loginName;
+        return this.token;
     }
 
     @Override

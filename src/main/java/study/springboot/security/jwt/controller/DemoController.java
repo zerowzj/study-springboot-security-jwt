@@ -3,7 +3,7 @@ package study.springboot.security.jwt.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import study.springboot.security.jwt.support.Results;
+import study.springboot.security.jwt.support.result.Results;
 
 import java.util.Map;
 

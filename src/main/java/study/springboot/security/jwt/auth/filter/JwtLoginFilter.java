@@ -1,8 +1,6 @@
 package study.springboot.security.jwt.auth.filter;
 
 import com.google.common.collect.Lists;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,7 +9,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.springboot.security.jwt.auth.details.CustomUserDetails;
 import study.springboot.security.jwt.auth.jwt.JwtUtils;
-import study.springboot.security.jwt.support.Results;
+import study.springboot.security.jwt.support.result.Results;
+import study.springboot.security.jwt.support.utils.CookieUtils;
 import study.springboot.security.jwt.support.utils.JsonUtils;
 import study.springboot.security.jwt.support.utils.WebUtils;
 
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 
 @Slf4j
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -35,7 +33,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        log.info("======> attemptAuthentication");
+        log.info(">>>>>> attemptAuthentication");
         InputStream is = null;
         try {
             is = request.getInputStream();
@@ -43,10 +41,10 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
             log.error("", ex);
         }
         //构造token
-        CustomUserDetails userDetails = JsonUtils.fromJson(is, CustomUserDetails.class);
+        LoginRequest loginRequest = JsonUtils.fromJson(is, LoginRequest.class);
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                userDetails.getUsername(),
-                userDetails.getPassword(),
+                loginRequest.getUsername(),
+                loginRequest.getPassword(),
                 Lists.newArrayList());
         //认证
         Authentication authentication = authenticationManager.authenticate(token);
@@ -59,12 +57,10 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info(">>>>>> successfulAuthentication");
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String jwt = JwtUtils.createToken(null);
-        Cookie cookie = new Cookie("jwt", jwt);
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(3*3600);
+        String jwt = JwtUtils.createJwt(null);
+        Cookie cookie = CookieUtils.newCookie("jwt", jwt);
         response.addCookie(cookie);
-//        response.addHeader(Constants.AUTHORIZATION_HEADER, Constants.PREFIX + token);
+
         WebUtils.write(response, Results.ok());
     }
 
