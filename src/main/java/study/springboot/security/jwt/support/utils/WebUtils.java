@@ -11,6 +11,11 @@ import java.util.Map;
 @Slf4j
 public class WebUtils {
 
+    /**
+     * ====================
+     * <p>
+     * ====================
+     */
     public static HttpServletRequest toHttp(ServletRequest servletRequest) {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         return request;
@@ -21,6 +26,11 @@ public class WebUtils {
         return response;
     }
 
+    /**
+     * ====================
+     * <p>
+     * ====================
+     */
     public static void sendError(HttpServletResponse response, int statusCode) {
         sendError(response, statusCode, null);
     }
@@ -33,6 +43,11 @@ public class WebUtils {
         }
     }
 
+    /**
+     * ====================
+     * <p>
+     * ====================
+     */
     public static void write(HttpServletResponse response, Map<String, Object> result) {
         PrintWriter writer = null;
         try {
