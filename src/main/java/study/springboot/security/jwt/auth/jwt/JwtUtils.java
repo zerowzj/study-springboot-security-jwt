@@ -5,75 +5,74 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.DefaultClaims;
 
 import java.util.Map;
 
 public class JwtUtils {
 
-    private final static SignatureAlgorithm DEFAULT_ALGORITHM = SignatureAlgorithm.HS256;
+    private final static SignAlg DEFAULT_ALGORITHM = SignAlg.HS256;
 
     private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ123";
 
-    public static String createToken(Map<String, Object> claims) {
-        return createToken(claims, null, null);
+    /**
+     * ====================
+     * 生成jwt
+     * ====================
+     */
+    public static String createJwt(Map<String, Object> claims) {
+        return createJwt(claims, null, null);
     }
 
-    public static String createToken(Map<String, Object> claims, SignatureAlgorithm algorithm, String secretKey) {
-        if (algorithm == null) {
-            algorithm = DEFAULT_ALGORITHM;
-        }
-        if (secretKey == null) {
+    public static String createJwt(Map<String, Object> claims, SignAlg signAlg, String secretKey) {
+        SignatureAlgorithm algorithm = transform(signAlg);
+        if(secretKey == null){
             secretKey = DEFAULT_SECRET_KEY;
         }
-        //payload标准声明和私有声明
         JwtBuilder builder = Jwts.builder()
                 .setClaims(claims)
                 .signWith(algorithm, secretKey);
         return builder.compact();
     }
 
-    public static Claims parseToken(String jwt) {
-        return parseToken(jwt, null);
-    }
-
-    public static Claims parseToken(String jwt, String secretKey) {
-        if (secretKey == null) {
+    /**
+     * ====================
+     * 验证jwt
+     * ====================
+     */
+    public boolean verify(String jwt, SignAlg signAlg, String secretKey) {
+        SignatureAlgorithm algorithm = transform(signAlg);
+        if(secretKey == null){
             secretKey = DEFAULT_SECRET_KEY;
         }
+        return true;
+    }
+
+    /**
+     * ====================
+     * 解析jwt
+     * ====================
+     */
+    public static Claims parseJwt(String jwt) {
         Jws<Claims> jws = Jwts.parser()
-                .setSigningKey(secretKey)
                 .parseClaimsJws(jwt);
         return jws.getBody();
     }
 
-    public boolean verify(String jwt) {
-
-        /*
-            // 得到DefaultJwtParser
-            Claims claims = decode(jwtToken);
-
-            if (claims.get("password").equals(user.get("password"))) {
-                return true;
-            }
-        */
-        return true;
-    }
-
-    public static void main(String[] args) {
-        Claims claims = new DefaultClaims();
-        claims.setId("123123");
-        claims.put("username", "tom");
-        claims.put("password", "123456");
-
-        String jwtToken = createToken(claims);
-        System.out.println(jwtToken);
-        /*
-        util.isVerify(jwtToken);
-        System.out.println("合法");
-        */
-        parseToken(jwtToken).entrySet().forEach((entry) -> {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        });
+    private static SignatureAlgorithm transform(SignAlg signAlg) {
+        if (signAlg == null) {
+            signAlg = DEFAULT_ALGORITHM;
+        }
+        SignatureAlgorithm algorithm;
+        switch (signAlg) {
+            case HS256:
+                algorithm = SignatureAlgorithm.HS256;
+                break;
+            case HS512:
+                algorithm = SignatureAlgorithm.HS512;
+                break;
+            default:
+                throw new RuntimeException("不支持的算法");
+        }
+        return algorithm;
     }
 }
