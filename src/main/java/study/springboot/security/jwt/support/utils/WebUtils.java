@@ -13,6 +13,15 @@ public class WebUtils {
 
     /**
      * ====================
+     * <p>
+     * ====================
+     */
+    public static String getBodyText(HttpServletRequest request) {
+        return null;
+    }
+
+    /**
+     * ====================
      * 转换Http
      * ====================
      */
