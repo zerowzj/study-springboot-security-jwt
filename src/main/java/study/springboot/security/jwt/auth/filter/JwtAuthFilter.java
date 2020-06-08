@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 import study.springboot.security.jwt.auth.Constants;
 import study.springboot.security.jwt.support.utils.CookieUtils;
 import study.springboot.security.jwt.support.utils.WebUtils;
@@ -26,11 +27,9 @@ import java.io.IOException;
  * 如果校验通过，就认为这是一个取得授权的合法请求
  */
 @Slf4j
+@Component
 public class JwtAuthFilter extends BasicAuthenticationFilter {
 
-    public JwtAuthFilter(AuthenticationManager authenticationManager) {
-        super(authenticationManager);
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -40,8 +39,6 @@ public class JwtAuthFilter extends BasicAuthenticationFilter {
         String jwt = WebUtils.getHeader(request, Constants.AUTHORIZATION_HEADER);
         if (Strings.isNullOrEmpty(jwt)) {
             throw new BadCredentialsException("需要认证");
-//            chain.doFilter(request, response);
-//            return;
         }
 
 //        String jwt = CookieUtils.getValue(request, "jwt");

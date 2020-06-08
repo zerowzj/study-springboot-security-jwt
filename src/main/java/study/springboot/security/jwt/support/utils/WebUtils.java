@@ -37,7 +37,7 @@ public class WebUtils {
 
     /**
      * ====================
-     * <p>
+     * 发送状态码
      * ====================
      */
     public static void sendError(HttpServletResponse response, int statusCode) {
@@ -54,7 +54,7 @@ public class WebUtils {
 
     /**
      * ====================
-     * <p>
+     * 输出信息
      * ====================
      */
     public static void write(HttpServletResponse response, Map<String, Object> result) {

@@ -26,6 +26,10 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    @Autowired
+    private JwtLoginFilter jwtLoginFilter;
+    @Autowired
+    private JwtAuthFilter jwtAuthFilter;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -45,8 +49,8 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/demo").permitAll()
 //                .anyRequest().authenticated();
         //过滤器
-        http.addFilter(new JwtLoginFilter(authenticationManager()))
-                .addFilter(new JwtAuthFilter(authenticationManager()));
+        http.addFilter(jwtLoginFilter)
+                .addFilter(jwtAuthFilter);
         //异常处理
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);
@@ -54,7 +58,6 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider()
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }

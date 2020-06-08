@@ -31,26 +31,25 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-//    public JwtLoginFilter(AuthenticationManager authenticationManager) {
-//        this.authenticationManager = authenticationManager;
-//    }
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info(">>>>>> attemptAuthentication");
+        //******************** 获取请求参数 ********************
         InputStream is = null;
         try {
             is = request.getInputStream();
         } catch (Exception ex) {
             log.error("", ex);
         }
-        //构造token
         LoginRequest loginRequest = JsonUtils.fromJson(is, LoginRequest.class);
+
+        //******************** 构造Token ********************
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 loginRequest.getUsername(),
                 loginRequest.getPassword(),
                 Lists.newArrayList());
-        //认证
+
+        //******************** 认证 ********************
         Authentication authentication = authenticationManager.authenticate(token);
         return authentication;
     }
@@ -62,6 +61,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         //********************  ********************
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String token = userDetails.getPassword();
+
         //******************** 生成Cookie ********************
         String jwt = JwtUtils.createJwt(null);
         Cookie cookie = CookieUtils.newCookie("jwt", jwt);
