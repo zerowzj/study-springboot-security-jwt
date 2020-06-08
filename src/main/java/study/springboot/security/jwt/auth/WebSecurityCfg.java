@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,17 +29,15 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.debug(true);
-        //
-        web.ignoring()
-                .antMatchers("/demo");
+        web.debug(true)
+                .ignoring();
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //
         http.csrf().disable();
-        //
+        //会话
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //授权
@@ -57,6 +54,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider()
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }

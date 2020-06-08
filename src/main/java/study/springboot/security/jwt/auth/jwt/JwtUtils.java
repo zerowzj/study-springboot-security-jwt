@@ -31,7 +31,8 @@ public class JwtUtils {
         JwtBuilder builder = Jwts.builder()
                 .setClaims(claims)
                 .signWith(algorithm, secretKey);
-        return builder.compact();
+        String jwt = builder.compact();
+        return jwt;
     }
 
     /**

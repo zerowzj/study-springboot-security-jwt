@@ -2,11 +2,13 @@ package study.springboot.security.jwt.auth.filter;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 import study.springboot.security.jwt.auth.details.CustomUserDetails;
 import study.springboot.security.jwt.auth.jwt.JwtUtils;
 import study.springboot.security.jwt.support.result.Results;
@@ -23,13 +25,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Slf4j
+@Component
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
+    @Autowired
     private AuthenticationManager authenticationManager;
 
-    public JwtLoginFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
+//    public JwtLoginFilter(AuthenticationManager authenticationManager) {
+//        this.authenticationManager = authenticationManager;
+//    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -55,8 +59,10 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info(">>>>>> successfulAuthentication");
+        //********************  ********************
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
+        String token = userDetails.getPassword();
+        //******************** 生成Cookie ********************
         String jwt = JwtUtils.createJwt(null);
         Cookie cookie = CookieUtils.newCookie("jwt", jwt);
         response.addCookie(cookie);
