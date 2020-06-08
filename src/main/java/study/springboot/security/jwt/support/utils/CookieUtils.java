@@ -32,20 +32,39 @@ public final class CookieUtils {
 
     /**
      * ====================
+     * 是否包含某Cookie
+     * ====================
+     */
+    public static boolean contain(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        boolean isContain = false;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                String name = cookie.getName();
+                if (cookieName.equalsIgnoreCase(name)) {
+                    isContain = true;
+                    break;
+                }
+            }
+        }
+        return isContain;
+    }
+
+    /**
+     * ====================
      * 获取Cookie值
      * ====================
      */
-    public static String getValue(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
+    public static String getValue(HttpServletRequest request, String cookieName) {
         String value = null;
-        if (cookies != null) {
+        if (contain(request, cookieName)) {
+            Cookie[] cookies = request.getCookies();
             for (Cookie cookie : cookies) {
-                String n = cookie.getName();
-                if (name.equalsIgnoreCase(n)) {
+                String name = cookie.getName();
+                if (cookieName.equalsIgnoreCase(name)) {
                     value = cookie.getValue();
                     break;
                 }
-                cookie.getName();
             }
         }
         return value;
