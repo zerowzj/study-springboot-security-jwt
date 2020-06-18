@@ -59,4 +59,7 @@ public class JwtAuthFilter extends BasicAuthenticationFilter {
                 .getSubject();
         return new UsernamePasswordAuthenticationToken(username, null, Lists.newArrayList());
     }
+
+    @Test
+    public void test(){}
 }

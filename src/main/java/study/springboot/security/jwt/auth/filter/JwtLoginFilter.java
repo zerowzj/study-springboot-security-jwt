@@ -45,10 +45,10 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
             throw new IllegalArgumentException("");
         }
         //******************** <2>.构造Token ********************
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+        UsernamePasswordAuthenticationToken authcToken = new UsernamePasswordAuthenticationToken(username, password);
 
         //******************** <3>.认证并返回 ********************
-        Authentication authentication = authenticationManager.authenticate(token);
+        Authentication authentication = authenticationManager.authenticate(authcToken);
         return authentication;
     }
 
@@ -57,7 +57,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info(">>>>>> successfulAuthentication");
         //******************** <1>. ********************
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
+        UsernamePasswordAuthenticationToken authcToken = (UsernamePasswordAuthenticationToken) authentication;
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String token = userDetails.getPassword();
 
